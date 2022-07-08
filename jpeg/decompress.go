@@ -465,7 +465,7 @@ func DecodeIntoRGBA(r io.Reader, options *DecoderOptions) (dest *image.RGBA, err
 
 	return
 }
-func DecodeIntoRGBA2(dest *image.RGBA, r io.Reader, options *DecoderOptions) (err error) {
+func DecodeIntoRGBA2(dest **image.RGBA, r io.Reader, options *DecoderOptions) (err error) {
 	dinfo := newDecompress(r)
 	if dinfo == nil {
 		return  errors.New("allocation failed")
@@ -490,6 +490,12 @@ func DecodeIntoRGBA2(dest *image.RGBA, r io.Reader, options *DecoderOptions) (er
 	setupDecoderOptions(dinfo, options)
 
 	C.jpeg_calc_output_dimensions(dinfo)
+	
+	w := int(dinfo.output_width)
+	h :=  int(dinfo.output_height)
+	if ((*dest).Bounds().Dx() !=  w|| (*dest).Bounds().Dy() !=  h){
+		*dest = image.NewRGBA(image.Rect(0, 0, int(dinfo.output_width), int(dinfo.output_height)))
+	}
 	//dest = image.NewRGBA(image.Rect(0, 0, int(dinfo.output_width), int(dinfo.output_height)))
 
 	colorSpace := getJCS_EXT_RGBA()
@@ -497,11 +503,10 @@ func DecodeIntoRGBA2(dest *image.RGBA, r io.Reader, options *DecoderOptions) (er
 		return  errors.New("JCS_EXT_RGBA is not supported (probably built without libjpeg-turbo)")
 	}
 	dinfo.out_color_space = colorSpace
-	err = readRGBScanlines(dinfo, dest.Pix, dest.Stride)
+	err = readRGBScanlines(dinfo, (*dest).Pix, (*dest).Stride)
 
 	return
 }
-
 // DecodeConfig returns the color model and dimensions of a JPEG image without decoding the entire image.
 func DecodeConfig(r io.Reader) (config image.Config, err error) {
 	dinfo := newDecompress(r)
