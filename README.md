@@ -1,6 +1,13 @@
 go-libjpeg
 ==========
 
+## About this fork
+
+Fork with an additional method to reuse an image.RGBA instead of creating a new one when encoding an image.
+See decrompress.go line 470
+
+## go-libjpeg
+
 [![GoDoc](https://godoc.org/github.com/pixiv/go-libjpeg/jpeg?status.svg)](https://godoc.org/github.com/pixiv/go-libjpeg/jpeg)
 [![Build Status](https://travis-ci.org/pixiv/go-libjpeg.svg?branch=master)](https://travis-ci.org/pixiv/go-libjpeg)
 

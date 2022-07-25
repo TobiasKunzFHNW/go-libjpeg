@@ -465,6 +465,8 @@ func DecodeIntoRGBA(r io.Reader, options *DecoderOptions) (dest *image.RGBA, err
 
 	return
 }
+
+//DecodeIntoRGBA2 does the same as the original DecodeIntoRGBA2 method, but reuses the provided image.RGBA (if the dimensions stay the same) instead of always creating a new instance.
 func DecodeIntoRGBA2(dest **image.RGBA, r io.Reader, options *DecoderOptions) (err error) {
 	dinfo := newDecompress(r)
 	if dinfo == nil {
@@ -491,12 +493,12 @@ func DecodeIntoRGBA2(dest **image.RGBA, r io.Reader, options *DecoderOptions) (e
 
 	C.jpeg_calc_output_dimensions(dinfo)
 	
+  // If the image sizes don't match create a new one, else used the provided one
 	w := int(dinfo.output_width)
 	h :=  int(dinfo.output_height)
 	if ((*dest).Bounds().Dx() !=  w|| (*dest).Bounds().Dy() !=  h){
 		*dest = image.NewRGBA(image.Rect(0, 0, int(dinfo.output_width), int(dinfo.output_height)))
 	}
-	//dest = image.NewRGBA(image.Rect(0, 0, int(dinfo.output_width), int(dinfo.output_height)))
 
 	colorSpace := getJCS_EXT_RGBA()
 	if colorSpace == C.JCS_UNKNOWN {
