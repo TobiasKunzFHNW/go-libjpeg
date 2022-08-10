@@ -145,7 +145,7 @@ import (
 	"io"
 	"unsafe"
 
-  "github.com/TobiasKunzFHNW/go-libjpeg/rgb"
+  "github.com/mjpeg-multiplexer/go-libjpeg/rgb"
 )
 
 // EncoderOptions specifies which settings to use during Compression.
