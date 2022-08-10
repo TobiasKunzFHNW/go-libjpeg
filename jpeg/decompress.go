@@ -160,7 +160,7 @@ import (
 	"io"
 	"unsafe"
 
-  "github.com/TobiasKunzFHNW/go-libjpeg/rgb"
+  "github.com/mjpeg-multiplexer/go-libjpeg/rgb"
 
 )
 
